@@ -22,13 +22,11 @@ class CatalogueController extends Controller
     {
         $search = $request->query('search');
 
-        $user = $request->user();
+        $isGestionnaire = $request->user('sanctum')?->estGestionnaire() ?? false;
 
-        if ($user && $user->estGestionnaire()) {
-            $services = $this->catalogueService->listAll($search);
-        } else {
-            $services = $this->catalogueService->catalogueClient($search);
-        }
+        $services = $isGestionnaire
+            ? $this->catalogueService->listAll($search)
+            : $this->catalogueService->catalogueClient($search);
 
         return response()->json(ServiceResource::collection($services));
     }

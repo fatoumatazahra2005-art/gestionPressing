@@ -10,17 +10,14 @@ class CatalogueService
 {
     public function catalogueClient(?string $search = null): Collection
     {
-        return Service::catalogue()
-            ->when($search, fn ($query) => $query->where('libelle', 'like', "%{$search}%"))
-            ->orderBy('libelle')
-            ->get();
+        return Service::catalogue() ->when($search, function ($query) use ($search)
+        { $query->where('libelle', 'ILIKE', "%{$search}%"); }) ->orderBy('libelle') ->get();
     }
 
     public function listAll(?string $search = null): Collection
     {
-        return Service::when($search, fn ($query) => $query->where('libelle', 'like', "%{$search}%"))
-            ->orderBy('libelle')
-            ->get();
+        return Service::query() ->when($search, function ($query) use ($search)
+        { $query->where('libelle', 'ILIKE', "%{$search}%"); }) ->orderBy('libelle') ->get();
     }
 
     public function create(array $data): Service

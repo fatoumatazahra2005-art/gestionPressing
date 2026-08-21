@@ -5,15 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreServiceRequest extends FormRequest
+class CreateTicketRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-       return $this->user()->can('create', \App\Models\Service::class);
-
+        return true;
     }
 
     /**
@@ -24,10 +23,9 @@ class StoreServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'libelle' => ['required', 'string', 'max:255'],
-            'prix_unitaire' => ['required', 'numeric', 'min:0'],
-            'description' => ['nullable', 'string'],
-            'disponible' => ['sometimes', 'boolean'],
+            'lignes' => ['required', 'array', 'min:1'],
+            'lignes.*.service_id' => ['required', 'integer', 'exists:services,id'],
+            'lignes.*.quantite' => ['required', 'integer', 'min:1'],
         ];
     }
 }

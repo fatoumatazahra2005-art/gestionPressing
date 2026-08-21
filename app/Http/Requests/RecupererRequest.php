@@ -5,15 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreServiceRequest extends FormRequest
+class RecupererRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-       return $this->user()->can('create', \App\Models\Service::class);
-
+        return true;
     }
 
     /**
@@ -24,10 +23,8 @@ class StoreServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'libelle' => ['required', 'string', 'max:255'],
-            'prix_unitaire' => ['required', 'numeric', 'min:0'],
-            'description' => ['nullable', 'string'],
-            'disponible' => ['sometimes', 'boolean'],
+            'montant' => ['sometimes', 'numeric', 'min:0'],
+            'mode_paiement' => ['sometimes', 'string', 'max:50'],
         ];
     }
 }
